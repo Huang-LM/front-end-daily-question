@@ -1,12 +1,18 @@
 import * as vscode from "vscode";
 import * as path from "path";
+// import * as tempy from "tempy";
+// import * as fs from "fs";
+// import * as queryString from "query-string";
+// import * as execa from "execa";
+// const SAVE_DIRECTORY = tempy.directory();
 
-// export function webViewPanel(context: vscode.ExtensionContext) {
+// const FULL_DOWNLOADED_PATH = `${SAVE_DIRECTORY}/shareImg.png`;
+
 export function webViewPanel(context: vscode.ExtensionContext, code: string) {
 	// 1. 使用 createWebviewPanel 创建一个 panel，然后给 panel 放入 html 即可展示 web view
 	const panel = vscode.window.createWebviewPanel(
-		"helloWorld",
-		"Hello world",
+		"shareWeb",
+		"shareCode",
 		vscode.ViewColumn.One, // web view 显示位置
 		{
 			enableScripts: true, // 允许 JavaScript
@@ -15,45 +21,96 @@ export function webViewPanel(context: vscode.ExtensionContext, code: string) {
 	);
 
 	const template = {
-		background: "#eee",
-		width: "600px",
-		height: "350px",
+		background: "#fff",
+		width: "auto",
+		height: "auto",
 		borderRadius: "25px",
 	};
 
-	const webviewDir = path.join(context.extensionPath, "media");
-	let URI = vscode.Uri.file(path.join(webviewDir, "phj.js"));
-	URI = URI.with({ scheme: "vscode-resource" });
+	// 获取npm包
+	const onDiskPath = vscode.Uri.file(
+		path.join(context.extensionPath, "media", "phl.js")
+	);
+	const URI = onDiskPath.with({ scheme: "vscode-resource" });
 
-	panel.webview.html = getWebViewContent(code, template, URI);
+	panel.webview.html = getWebviewContent(code, JSON.stringify(template), URI);
+
+	// Handle messages from the webview
+	// panel.webview.onDidReceiveMessage(
+	// 	async (base) => {
+	// 		switch (base.command) {
+	// 			case "share":
+	// 				let canvas = JSON.parse(base.canvas);
+	// 				console.log(canvas);
+
+	// 				canvas
+	// 					.createPNGStream()
+	// 					.pipe(
+	// 						fs.createWriteStream(path.join(SAVE_DIRECTORY, "shareImg.png"))
+	// 					);
+	// 				// const downloadedAs = FULL_DOWNLOADED_PATH;
+	// 				// await imgToClipboard(downloadedAs);
+
+	// 				fs.unlink(path.join(SAVE_DIRECTORY, "shareImg.png"), (err) => {
+	// 					if (err) {
+	// 						throw err;
+	// 					}
+	// 				});
+	// 				return;
+	// 		}
+	// 	},
+	// 	undefined,
+	// 	context.subscriptions
+	// );
+	// return imgUrl;
 }
 
-function getWebViewContent(
+function getWebviewContent(
 	code: string,
-	template: object,
+	template: string,
 	scriptUri: vscode.Uri
 ) {
 	return `<!DOCTYPE html>
-	<html lang="en">
-	<head>
-			<meta charset="UTF-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-			<title>Cat Coding</title>
-	</head>
-			<body>
+		<html lang="en">
+		<head>
+				<meta charset="UTF-8">
+				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<title>Cat Coding</title>
+		</head>
+		<body>
+		
 				<canvas id="canvas"></canvas>
-				
 				<script src="${scriptUri}"></script>
 				<script type="module">
-					import phj from "phj.js";
-					const CanvasNode = document.getElementById('canvas');
-					const canvas = CanvasNode.getContext('2d');
+				(function() {
+					const canvas = document.getElementById('canvas');
+					const ctx = canvas.getContext('2d');
+					const vscode = acquireVsCodeApi();
+									
+					phl(canvas, ctx, ${template}, \`${code}\`, "js");		
 
-					phj(CanvasNode, canvas, ${template}, ${code}, "js")
+					// let img = canvas.pngStream();
+					// console.log(canvas.pngStream());
+					setTimeout(() => {
+						let imgURL = canvas.toDataURL(canvas);
+
+						const a = document.createElement('a')
+						a.href = imgURL
+						a.setAttribute('download', 'shareImg')
+						a.click()
+						document.body.removeChild(a);
+						
+						// vscode.postMessage({
+						// 	command: 'share',
+						// 	img: img
+						// })
+						
+					}, 500);
+				}())
 				</script>
-			</body>
-		</html>
-  `;
+				
+		</body>
+		</html>`;
 }
 
 // // 2. 周期性改变 html 中的内容，因为是直接给 webview.html 赋值，所以是刷新整个内容
@@ -71,11 +128,3 @@ function getWebViewContent(
 // 	null,
 // 	context.subscriptions
 // );
-
-// <script src="https://cdn.jsdelivr.net/npm/painter-kernel@1.0.5/dist/painter.min.js"></script>
-// <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
-// <script src="https://cdn.jsdelivr.net/npm/painter-highlight@0.1.1/dist/index.min.js"></script>
-// <script type="module">
-// 	import phj from 'painter-hightlight'
-// 	import hljs from 'highlight.js';
-// 	import { Pen, toPx } from 'painter-kernel';

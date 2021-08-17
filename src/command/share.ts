@@ -1,9 +1,8 @@
 import * as vscode from "vscode";
 // import * as tempy from "tempy";
 // import * as queryString from "query-string";
-import * as execa from "execa";
+// import * as execa from "execa";
 import { webViewPanel } from "./shareWeb";
-// const SAVE_DIRECTORY = tempy.directory();
 // const SAVE_DIRECTORY = tempy.directory();
 
 // const FULL_DOWNLOADED_PATH = `${SAVE_DIRECTORY}/carbon.png`;
@@ -18,51 +17,56 @@ const processContent = (input: string, START = 0, END = 1000) => {
 			return reject();
 		}
 
+		let r = input
+			.split(NEW_LINE)
+			.filter((line, index) => {
+				const CURRENT_LINE = index + 1;
+				return CURRENT_LINE >= START && CURRENT_LINE <= END;
+			})
+			.join(NEW_LINE);
+
+		let start = r.indexOf("*[interview]: start");
+		let end = r.indexOf("*[interview]: end");
+
+		r = r.slice(start + 19, end);
+
 		// Otherwise resolve with the correct section
-		resolve(
-			input
-				.split(NEW_LINE)
-				.filter((line, index) => {
-					const CURRENT_LINE = index + 1;
-					return CURRENT_LINE >= START && CURRENT_LINE <= END;
-				})
-				.join(NEW_LINE)
-		);
+		resolve(r);
 	});
 };
 
 // 复制的方法
-const imgToClipboard = async (imgPath: string) => {
-	const OS = process.platform;
-	let SCRIPT;
+// const imgToClipboard = async (imgPath: string) => {
+// 	const OS = process.platform;
+// 	let SCRIPT;
 
-	switch (OS) {
-		case "darwin": {
-			SCRIPT = `osascript -e 'set the clipboard to (read (POSIX file "${imgPath}") as JPEG picture)'`;
-			break;
-		}
-		case "win32": {
-			SCRIPT = `nircmd clipboard copyimage ${imgPath}`;
-			break;
-		}
-		default: {
-			SCRIPT = `xclip -selection clipboard -t image/png -i ${imgPath}`;
-		}
-	}
+// 	switch (OS) {
+// 		case "darwin": {
+// 			SCRIPT = `osascript -e 'set the clipboard to (read (POSIX file "${imgPath}") as JPEG picture)'`;
+// 			break;
+// 		}
+// 		case "win32": {
+// 			SCRIPT = `nircmd clipboard copyimage ${imgPath}`;
+// 			break;
+// 		}
+// 		default: {
+// 			SCRIPT = `xclip -selection clipboard -t image/png -i ${imgPath}`;
+// 		}
+// 	}
 
-	// Running `await execa` leads to `Listr` not resolving the last task on Linux
-	// Hence, we need to distinguish between OS’s and run it with or without `await`
-	// This solution is not insanely beautiful, but makes it work cross-OS ¯\_(ツ)_/¯
-	if (OS === "darwin" || OS === "win32") {
-		await execa(SCRIPT, [], {
-			shell: true,
-		});
-	} else {
-		execa(SCRIPT, [], {
-			shell: true,
-		});
-	}
-};
+// 	// Running `await execa` leads to `Listr` not resolving the last task on Linux
+// 	// Hence, we need to distinguish between OS’s and run it with or without `await`
+// 	// This solution is not insanely beautiful, but makes it work cross-OS ¯\_(ツ)_/¯
+// 	if (OS === "darwin" || OS === "win32") {
+// 		await execa(SCRIPT, [], {
+// 			shell: true,
+// 		});
+// 	} else {
+// 		execa(SCRIPT, [], {
+// 			shell: true,
+// 		});
+// 	}
+// };
 
 export async function share(
 	content: string,
@@ -74,6 +78,8 @@ export async function share(
 		// const urlEncodedContent = encodeURIComponent(processedContent);
 
 		webViewPanel(context, processedContent);
+		// console.log(url);
+
 		// const settings = {
 		// 	code: urlEncodedContent,
 		// 	l: "auto",
@@ -89,7 +95,7 @@ export async function share(
 		// 	headless: true,
 		// });
 
-		// vscode.window.showInformationMessage("生成成功，请稍等...");
+		vscode.window.showInformationMessage("生成成功，请稍等...");
 		// const downloadedAs = FULL_DOWNLOADED_PATH;
 		// await imgToClipboard(downloadedAs);
 		// vscode.window.showInformationMessage(
@@ -103,3 +109,6 @@ export async function share(
 		vscode.window.showInformationMessage("生成失败！");
 	}
 }
+// function headlessVisit(arg0: { url: string; location: any; type: string; headless: boolean; }) {
+// 	throw new Error("Function not implemented.");
+// }
