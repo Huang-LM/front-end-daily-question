@@ -83,7 +83,7 @@ export async function activate(
 			vscode.window.registerWebviewViewProvider("dailyEnglish", sidebarProvider)
 		);
 		// -------- English 相关 -----------
-	} catch (error) {
+	} catch (error: any) {
 		window.showInformationMessage(error);
 	}
 }

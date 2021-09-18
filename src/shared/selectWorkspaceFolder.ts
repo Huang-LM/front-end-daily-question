@@ -107,15 +107,17 @@ async function determineFEInterviewFolder(): Promise<string> {
 			value: ":browse",
 		}
 	);
-	const choice: IQuickItemEx<string> | undefined =
-		await vscode.window.showQuickPick(picks, {
-			placeHolder: "选择存放习题的工作目录",
-		});
+	const choice:
+		| IQuickItemEx<string>
+		| undefined = await vscode.window.showQuickPick(picks, {
+		placeHolder: "选择存放习题的工作目录",
+	});
 	if (!choice) {
 		result = "";
 	} else if (choice.value === ":browse") {
-		const directory: vscode.Uri[] | undefined =
-			await showDirectorySelectDialog();
+		const directory:
+			| vscode.Uri[]
+			| undefined = await showDirectorySelectDialog();
 		if (!directory || directory.length < 1) {
 			result = "";
 		} else {
@@ -139,8 +141,11 @@ function getBelongingWorkspaceFolderUri(
 ): vscode.Uri | undefined {
 	let defaultUri: vscode.Uri | undefined;
 	if (fsPath) {
-		const workspaceFolder: vscode.WorkspaceFolder | undefined =
-			vscode.workspace.getWorkspaceFolder(vscode.Uri.file(fsPath));
+		const workspaceFolder:
+			| vscode.WorkspaceFolder
+			| undefined = vscode.workspace.getWorkspaceFolder(
+			vscode.Uri.file(fsPath)
+		);
 		if (workspaceFolder) {
 			defaultUri = workspaceFolder.uri;
 		}
@@ -151,8 +156,9 @@ function getBelongingWorkspaceFolderUri(
 export async function showDirectorySelectDialog(
 	fsPath?: string
 ): Promise<vscode.Uri[] | undefined> {
-	const defaultUri: vscode.Uri | undefined =
-		getBelongingWorkspaceFolderUri(fsPath);
+	const defaultUri: vscode.Uri | undefined = getBelongingWorkspaceFolderUri(
+		fsPath
+	);
 	const options: vscode.OpenDialogOptions = {
 		defaultUri,
 		canSelectFiles: false,

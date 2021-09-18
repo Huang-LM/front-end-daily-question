@@ -29,7 +29,6 @@ const processContent = (input: string, START = 0, END = 1000) => {
 	});
 };
 
-
 export async function share(
 	content: string,
 	context: vscode.ExtensionContext
