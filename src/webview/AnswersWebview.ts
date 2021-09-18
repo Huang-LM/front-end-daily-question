@@ -57,7 +57,9 @@ export class AnswersWebview extends AbstractWebview {
 				}
 			})
 		`;
-		if (!this.answersRes) return `<h2>${defaultErrorMsg}</h2>`;
+		if (!this.answersRes) {
+			return `<h2>${defaultErrorMsg}</h2>`;
+		}
 		const {
 			success,
 			errorMsg = defaultErrorMsg,
@@ -66,7 +68,9 @@ export class AnswersWebview extends AbstractWebview {
 			refer_answer,
 			data,
 		} = this.answersRes;
-		if (!success) return `<h2>${errorMsg}</h2>`;
+		if (!success) {
+			return `<h2>${errorMsg}</h2>`;
+		}
 		let prefix = "";
 		if (refer_answer === "仅限VIP查看") {
 			prefix = `

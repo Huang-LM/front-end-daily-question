@@ -25,7 +25,9 @@ export async function login(context: vscode.ExtensionContext): Promise<void> {
 		},
 	});
 
-	if (!data) return;
+	if (!data) {
+		return;
+	}
 	try {
 		const res: {
 			isStudent: boolean;
