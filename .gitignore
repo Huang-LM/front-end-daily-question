@@ -3,5 +3,3 @@ node_modules
 .vscode-test/
 *.vsix
 src/config.ts
-yarn.lock
-package-lock.json
