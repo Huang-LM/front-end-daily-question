@@ -22,7 +22,7 @@ export function webViewPanel(context: vscode.ExtensionContext, code: string) {
 
 	// 获取npm包
 	const onDiskPath = vscode.Uri.file(
-		path.join(context.extensionPath, "media", "index.js")
+		path.join(context.extensionPath, "media", "phl.js")
 	);
 	const URI = onDiskPath.with({ scheme: "vscode-resource" });
 
@@ -34,6 +34,7 @@ function getWebviewContent(
 	template: string,
 	scriptUri: vscode.Uri
 ) {
+	console.log("scriptUri", scriptUri);
 	return `<!DOCTYPE html>
 		<html lang="en">
 		<head>
