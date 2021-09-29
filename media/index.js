@@ -1,4 +1,3 @@
-// @ts-ignore
 (function (se, te) {
 	typeof exports == "object" && typeof module != "undefined"
 		? (module.exports = te())
@@ -36272,20 +36271,22 @@ https://github.com/highlightjs/highlight.js/issues/2277`
 `
 				)
 				.map((S, v) => {
-					let L;
+					let L,
+						k = S.match(r)?.length;
 					if (
-						((L =
+						(k === void 0 && (k = 0),
+						(L =
 							S.match(u)?.length +
-							S.match(r)?.length +
+							k +
 							(S.match(E)?.length ? S.match(E)?.length : 0)),
-						h < L && (h = L || 0),
 						S.match(r) && S.match(u)?.length)
 					) {
-						let k = S.indexOf(S.match(u)[0]);
-						S = S.slice(0, k) + S.slice(0, k) + S.slice(k);
+						let G = S.indexOf(S.match(u)[0]);
+						S = S.slice(0, G) + S.slice(0, G) + S.slice(G);
 					}
 					return (
 						typeof S == "string" && S.match(E) && (S = S.replace(E, "  ")),
+						h < L && (h = L || 0),
 						y++,
 						S
 					);
@@ -36355,7 +36356,7 @@ https://github.com/highlightjs/highlight.js/issues/2277`
 					top: "calc(hl0_" + (S - 1) + ".top)",
 					left: "calc(hl0_" + (S - 1) + ".right)",
 					color: l.default.color,
-					fontSize: "16px",
+					fontSize: "19px",
 				},
 			};
 			if (typeof C[S] == "object") {
@@ -36387,7 +36388,10 @@ https://github.com/highlightjs/highlight.js/issues/2277`
 						? (v.css.color = c.get("string").color)
 						: C[S].match(RegExp(/=/g))
 						? (v.css.color = c.get("attribute").color)
-						: (v.css.color = c.get("sign").color),
+						: (C[S].match(u) !== null &&
+								C[S].match(u).length !== 1 &&
+								(h += 0.6 * C[S].match(u).length),
+						  (v.css.color = c.get("sign").color)),
 					(v.css.left = "calc(hl0_" + (S - 1) + ".right + 2px)"),
 					(m || f) &&
 						(C[S] !== ";" &&
@@ -36419,7 +36423,7 @@ https://github.com/highlightjs/highlight.js/issues/2277`
 							(v.css.left = "calc(hl0_" + (S - 1) + ".right - 9px)"),
 						(f = 1));
 			p &&
-				((v.css.top = "calc(hl0_" + (S - 1) + ".top +" + 20 * (p + o) + " px)"),
+				((v.css.top = "calc(hl0_" + (S - 1) + ".top +" + 23 * (p + o) + " px)"),
 				(v.css.left = "0"),
 				C[S].match(T) && C[S].slice(2) && (v.css.left = "calc(hl0_0.right)"),
 				(p = 0),
@@ -36444,8 +36448,14 @@ https://github.com/highlightjs/highlight.js/issues/2277`
 			};
 			i.unshift(v);
 		}
-		a.height == "auto" && (a.height = 20 * y + 60 + "px"),
-			a.width == "auto" && (a.width = 10.5 * h + "px"),
+		i.unshift({
+			id: "hl1_4",
+			text: "VSCode\u63D2\u4EF6  \u524D\u7AEF\u6BCF\u65E5\u4E00\u9898",
+			type: "text",
+			css: { top: "14px", left: "98px", fontSize: "17px", color: "#41535b" },
+		}),
+			a.height == "auto" && (a.height = 23 * y + 55 + "px"),
+			a.width == "auto" && (a.width = 12 * h + "px"),
 			(e.width = Ra(a.width)),
 			(e.height = Ra(a.height)),
 			(a.views = i),

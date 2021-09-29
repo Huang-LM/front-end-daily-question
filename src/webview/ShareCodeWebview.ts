@@ -22,7 +22,7 @@ export function webViewPanel(context: vscode.ExtensionContext, code: string) {
 
 	// 获取npm包
 	const onDiskPath = vscode.Uri.file(
-		path.join(context.extensionPath, "media", "phl.js")
+		path.join(context.extensionPath, "media", "index.js")
 	);
 	const URI = onDiskPath.with({ scheme: "vscode-resource" });
 
@@ -34,7 +34,7 @@ function getWebviewContent(
 	template: string,
 	scriptUri: vscode.Uri
 ) {
-	console.log("scriptUri", scriptUri);
+	// console.log(code);
 	return `<!DOCTYPE html>
 		<html lang="en">
 		<head>
@@ -63,6 +63,19 @@ function getWebviewContent(
 					border-width: 0px; 
 					border-radius: 3px; 
 					background: #1E90FF; 
+					cursor: pointer; 
+					outline: none; 
+					color: white; 
+					font-size: 16px;
+					transition: 0.5s;
+				}
+				#btn:hover, #download:hover{
+					width: 80px; 
+					height: 40px; 
+					margin: 0 5px;
+					border-width: 0px; 
+					border-radius: 3px; 
+					background: #5eaefd; 
 					cursor: pointer; 
 					outline: none; 
 					color: white; 
