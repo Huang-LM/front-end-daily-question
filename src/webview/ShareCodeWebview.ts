@@ -85,12 +85,15 @@ function getWebviewContent(
 		</head>
 		<body>
 			<div id="back" style="background-color: #cfd2d1; height: 100vh; width: 100vw; padding: 36px 56px 56px 56px;">
-			<div class="inputBox">
-				<input id="codeWidth" placeholder="宽度，默认auto" > px
-				<button id="btn">生成</button>
-				<button id="download">下载</button>
-			</div>
-				<canvas id="canvas" style="box-shadow: 0px 6px 10px 4px #333; border-radius: 8px;"></canvas>		
+				<div style='zoom: 0.7'>
+					<div class="inputBox">
+						<input id="codeWidth" placeholder="宽度，默认auto" > px
+						<button id="btn">生成</button>
+						<button id="download">下载</button>
+					</div>
+					<canvas id="canvas" style="box-shadow: 0px 6px 10px 4px #333; border-radius: 8px;"></canvas>		
+				</div>
+				
 			</div>		
 				<script src="${scriptUri}"></script>
 				<script type="module">
