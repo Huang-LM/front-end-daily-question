@@ -22,7 +22,7 @@ export function webViewPanel(context: vscode.ExtensionContext, code: string) {
 
 	// 获取npm包
 	const onDiskPath = vscode.Uri.file(
-		path.join(context.extensionPath, "media", "index.js")
+		path.join(context.extensionPath, "media", "painterhighlight.js")
 	);
 	const URI = onDiskPath.with({ scheme: "vscode-resource" });
 
